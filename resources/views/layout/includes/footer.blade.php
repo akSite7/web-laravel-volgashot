@@ -1,4 +1,3 @@
-
 <footer class='w-full py-10 border-t border-gray-800' id="footer">
   <div class='container mx-auto space-y-7'>
     <div class='w-full flex flex-col justify-between items-start gap-10 lg:flex-row'>
