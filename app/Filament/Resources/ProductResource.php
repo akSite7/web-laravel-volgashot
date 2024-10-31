@@ -3,17 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -26,9 +21,9 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\BulkActionGroup;
+
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ActionGroup;
+
 use Filament\Notifications\Notification;
 use App\Models\Category;
 
@@ -50,6 +45,7 @@ class ProductResource extends Resource
                         TextInput::make('name')
                             ->label('Название товара')
                             ->placeholder('Название')
+                            ->maxLength(255)
                             ->required()
                             ->live(onBlur: true)
                             ->afterStateUpdated(function (Set $set, $state) {
@@ -58,6 +54,7 @@ class ProductResource extends Resource
                         TextInput::make('slug')
                             ->label('URL')
                             ->placeholder('URL')
+                            ->suffixIcon('heroicon-m-globe-alt')
                             ->disabled()
                             ->dehydrated()
                             ->unique(Product::class, 'slug', ignoreRecord: true)
@@ -65,6 +62,7 @@ class ProductResource extends Resource
                         TextInput::make('price')
                             ->label('Цена')
                             ->placeholder('Цена')
+                            ->suffix('₽')
                             ->required(),
                         Select::make('category_id')
                             ->label('Категория')
@@ -75,11 +73,14 @@ class ProductResource extends Resource
                             ->createOptionForm([
                                 TextInput::make('name')
                                     ->label('Название категории')
+                                    ->maxLength(255)
                                     ->placeholder('Название категории')
                                     ->required(),
                                 TextInput::make('slug')
                                     ->label('URL категории')
+                                    ->maxLength(255)
                                     ->placeholder('URL категории')
+                                    ->suffixIcon('heroicon-m-globe-alt')
                                     ->required(),
                                 Toggle::make('is_active')
                                     ->label('Отключена / Включена')
@@ -90,6 +91,7 @@ class ProductResource extends Resource
                     ]),
                     TextArea::make('description')
                             ->label('Описание')
+                            ->autosize()
                             ->placeholder('Описание')
                             ->required(),
                     Section::make('Медиа и изображения')->schema([
@@ -124,13 +126,12 @@ class ProductResource extends Resource
                     ->searchable(),
                 TextColumn::make('price')
                     ->label('Цена')
-                    ->searchable(),
+                    ->money('RUB'),
                 TextColumn::make('slug')
-                    ->label('URL')
-                    ->searchable(),
+                    ->label('URL'),
                 TextColumn::make('category.name')
                     ->label('Категория')
-                    ->searchable(),
+                    ->sortable(),
                 IconColumn::make('is_active')
                     ->label('Статус')
                     ->boolean(),

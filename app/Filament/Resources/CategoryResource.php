@@ -42,9 +42,12 @@ class CategoryResource extends Resource
                         TextInput::make('name')
                             ->label('Название категории')
                             ->placeholder('Категория')
+                            ->maxLength(255)
                             ->required(),
                         TextInput::make('slug')
-                            ->label('URL')
+                            ->label('URL категории')
+                            ->maxLength(255)
+                            ->suffixIcon('heroicon-m-globe-alt')
                             ->placeholder('URL')
                             ->required(),
                     ]),

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('price');
             $table->string('image');
-            $table->foreignId(Category::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Category::class)->constrained()->onDelete('cascade');
             $table->boolean('is_active')->default(true);
             // meta-поля
             $table->timestamps();
